@@ -53,6 +53,20 @@ public class ServicoDeAgendamento {
         return null;
     }
 
+    public Consulta buscarConsultaAgendada(String pacienteCpf, String medicoCrm, LocalDateTime dataHora) {
+        List<Consulta> todasAsConsultas = consultaRepo.listarTodos();
+        for (Consulta consulta : todasAsConsultas) {
+            if (consulta.getPaciente().getCpf().equals(pacienteCpf) &&
+                consulta.getMedico().getCrm().equals(medicoCrm) &&
+                consulta.getDataHora().isEqual(dataHora) &&
+                consulta.getStatus() == StatusConsulta.AGENDADA) {
+                return consulta;
+            }
+        }
+        return null;
+    }
+
+
     public void concluirConsulta(Consulta consulta, String diagnostico, String prescricao) {
         if (consulta != null) {
             consulta.setDiagnostico(diagnostico);

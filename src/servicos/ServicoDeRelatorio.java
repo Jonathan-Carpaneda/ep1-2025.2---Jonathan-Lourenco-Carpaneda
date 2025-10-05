@@ -3,7 +3,11 @@ package servicos;
 import entidades.*;
 import repositorios.*;
 
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ServicoDeRelatorio {
     
@@ -106,4 +110,33 @@ public class ServicoDeRelatorio {
             System.out.println("Nenhum paciente internado no momento.");
         }
     }
+
+    public void gerarRelatorioAgendaPorMedico(Medico medico) {
+    System.out.println("\n--- Agenda do(a) Dr(a). " + medico.getNome() + " ---");
+    List<Consulta> agenda = medico.getAgenda();
+    if (agenda.isEmpty()) {
+        System.out.println("Nenhuma consulta agendada.");
+        return;
+    }
+    agenda.sort(Comparator.comparing(Consulta::getDataHora));
+    for (Consulta c : agenda) {
+        System.out.printf("  - Data: %s | Paciente: %s | Status: %s\n", c.getDataHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), 
+        c.getPaciente().getNome(), c.getStatus());
+    }
+}
+
+public void gerarRelatorioPacientesPorMedico(Medico medico) {
+    System.out.println("\n--- Pacientes do(a) Dr(a). " + medico.getNome() + " ---");
+    Set<Paciente> pacientesUnicos = new HashSet<>();
+    for (Consulta c : medico.getAgenda()) {
+        pacientesUnicos.add(c.getPaciente());
+    }
+    if (pacientesUnicos.isEmpty()) {
+        System.out.println("Este medico ainda nao atendeu nenhum paciente.");
+        return;
+    }
+    for (Paciente p : pacientesUnicos) {
+        System.out.println("  - " + p.toString());
+    }
+}
 }

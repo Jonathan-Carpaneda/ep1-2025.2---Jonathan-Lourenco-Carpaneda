@@ -135,10 +135,12 @@ public class Main {
         int opcao = -1;
         while (opcao != 0) {
             System.out.println(ANSI_CYAN + "\n--- Menu de Relatorios ---" + ANSI_RESET);
-            System.out.println("1. Listar todos os Pacientes");
-            System.out.println("2. Listar todos os Medicos");
-            System.out.println("3. Buscar consultas de um Paciente");
-            System.out.println("4. Medico com mais atendimentos");
+            System.out.println("1. Relatorio Geral de Pacientes");
+            System.out.println("2. Relatorio Geral de Medicos");
+            System.out.println("3. Detalhes de um Medico Especifico (por CRM)");
+            System.out.println("4. Relatorio de Pacientes Internados");
+            System.out.println("5. Relatorio de Pacientes Internados");
+            System.out.println("6. Estatisticas Gerais");
             System.out.println(ANSI_YELLOW + "0. Voltar ao Menu Principal" + ANSI_RESET);
             System.out.print("Escolha uma opcao: ");
 
@@ -147,13 +149,15 @@ public class Main {
             switch(opcao) {
                 case 1: servicoDeRelatorio.gerarRelatorioPacientes(); break;
                 case 2: servicoDeRelatorio.gerarRelatorioMedicos(); break;
-                case 3: relatorioConsultasPorPaciente(); break;
-                case 4: servicoDeRelatorio.gerarEstatisticaMedicoMaisAtivo(); break;
+                case 3: exibirDetalhesMedico(); break;
+                case 4: relatorioConsultasPorPaciente(); break;
+                case 5: servicoDeRelatorio.gerarRelatorioPacientesInternados(); break;
+                case 6: servicoDeRelatorio.gerarEstatisticaMedicoMaisAtivo(); break;
                 case 0: break;
                 default: System.out.println(ANSI_RED + "Opcao invalida." + ANSI_RESET); break;
             }
              if (opcao != 0) {
-                System.out.println("\nPressione Enter para voltar ao menu de relatorios...");
+                System.out.println("\nPressione Enter para voltar...");
                 scanner.nextLine();
             }
         }
@@ -291,6 +295,11 @@ public class Main {
             String resultado = servicoDeAgendamento.agendarConsulta(pacienteCpf, medicoCrm, dataHora, local);
             if (resultado.startsWith("SUCESSO")) {
                 System.out.println(ANSI_GREEN + resultado + ANSI_RESET);
+                Consulta consultaAgendada = servicoDeAgendamento.buscarConsultaAgendada(pacienteCpf, medicoCrm, dataHora);
+                if (consultaAgendada != null) {
+                    double custoFinal = servicoDeFaturamento.calcularCustoConsulta(consultaAgendada);
+                    System.out.printf("Custo estimado da consulta: R$ %.2f\n", custoFinal);
+                }
             } else {
                 System.out.println(ANSI_RED + resultado + ANSI_RESET);
             }
@@ -370,6 +379,36 @@ public class Main {
         System.out.print("Digite o CPF do paciente para o relatorio: ");
         String cpf = scanner.nextLine();
         servicoDeRelatorio.gerarRelatorioConsultasPorPaciente(cpf);
+    }
+
+    private void exibirDetalhesMedico() {
+        System.out.print("\nDigite o CRM do medico para ver os detalhes: ");
+        String crm = scanner.nextLine();
+        Medico medico = repoMedico.buscarPorCrm(crm);
+
+        if (medico == null) {
+            System.out.println(ANSI_RED + "Erro: Medico com CRM " + crm + " nao encontrado." + ANSI_RESET);
+            return;
+        }
+        int opcao = -1;
+        while (opcao != 0) {
+            System.out.println(ANSI_CYAN + "\n--- Detalhes de Dr(a). " + medico.getNome() + " ---" + ANSI_RESET);
+            System.out.println("1. Ver Agenda de Consultas");
+            System.out.println("2. Ver Lista de Pacientes");
+            System.out.println(ANSI_YELLOW + "0. Voltar ao Menu de Relatorios" + ANSI_RESET);
+            System.out.print("Escolha uma opcao: ");
+            opcao = lerOpcao();
+            switch (opcao) {
+                case 1: servicoDeRelatorio.gerarRelatorioAgendaPorMedico(medico); break;
+                case 2: servicoDeRelatorio.gerarRelatorioPacientesPorMedico(medico); break;
+                case 0: break;
+                default: System.out.println(ANSI_RED + "Opcao invalida." + ANSI_RESET); break;
+            }
+            if (opcao != 0) {
+                System.out.println("\nPressione Enter para voltar...");
+                scanner.nextLine();
+            }
+        }
     }
 
     private int lerOpcao() {
