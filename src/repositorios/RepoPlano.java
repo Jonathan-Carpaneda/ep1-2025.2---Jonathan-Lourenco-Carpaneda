@@ -36,7 +36,7 @@ public class RepoPlano {
                 this.planosDeSaude.add(plano);
             }
         } catch (IOException e) {
-            System.out.println("Arquivo planos_saude.csv não encontrado. Será criado um novo.");
+            System.out.println("Arquivo planos_saude.csv nao encontrado. Sera criado um novo.");
         }
     }
 
@@ -54,7 +54,7 @@ public class RepoPlano {
                 bw.newLine();
             }
         } catch (IOException e) {
-            System.err.println("Erro ao salvar planos de saúde: " + e.getMessage());
+            System.err.println("Erro ao salvar planos de saude: " + e.getMessage());
         }
     }
 

@@ -47,7 +47,7 @@ public class RepoConsulta {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Arquivo consultas.csv não encontrado. Será criado um novo.");
+            System.out.println("Arquivo consultas.csv nao encontrado. Sera criado um novo.");
         }
     }
 

@@ -15,6 +15,8 @@ import servicos.ServicoDeRelatorio;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 
 public class Main {
     //cores para o ANSI
@@ -56,6 +58,13 @@ public class Main {
     }
 
     public static void main(String[] args) {
+
+        try {
+        System.setOut(new PrintStream(System.out, true, "UTF-8"));
+    } catch (UnsupportedEncodingException e) {
+        System.out.println("Erro de codificação: " + e.getMessage());
+    }
+
         Main app = new Main();
         app.exibirMenuPrincipal();
     }
@@ -65,10 +74,10 @@ public class Main {
         while (opcao != 0) {
             System.out.println(ANSI_CYAN + "\n===== Menu Principal =====" + ANSI_RESET);
             System.out.println("1. Cadastros");
-            System.out.println("2. Operações (Consulta/Internação)");
-            System.out.println("3. Relatórios");
+            System.out.println("2. Operacoes (Consulta/Internacao)");
+            System.out.println("3. Relatorios");
             System.out.println(ANSI_YELLOW + "0. Sair" + ANSI_RESET);
-            System.out.print("Escolha uma opção: ");
+            System.out.print("Escolha uma opcao: ");
 
             opcao = lerOpcao();
 
@@ -77,7 +86,7 @@ public class Main {
                     exibirMenuCadastros();
                     break;
                 case 2:
-                    System.out.println(ANSI_RED + "Menu de Operações ainda não implementado." + ANSI_RESET);
+                    System.out.println(ANSI_RED + "Menu de Operacoes ainda nao implementado." + ANSI_RESET);
                     break;
                 case 3:
                     servicoDeRelatorio.gerarRelatorioPacientes();
@@ -86,7 +95,7 @@ public class Main {
                     System.out.println("Encerrando o sistema...");
                     break;
                 default:
-                    System.out.println(ANSI_RED + "Opção inválida. Tente novamente." + ANSI_RESET);
+                    System.out.println(ANSI_RED + "Opcao invalida. Tente novamente." + ANSI_RESET);
                     break;
             }
         }
@@ -98,10 +107,10 @@ public class Main {
         while (opcao != 0) {
             System.out.println(ANSI_CYAN + "\n--- Menu de Cadastros ---" + ANSI_RESET);
             System.out.println("1. Cadastrar Paciente");
-            System.out.println("2. Cadastrar Médico");
-            System.out.println("3. Cadastrar Plano de Saúde");
+            System.out.println("2. Cadastrar Medico");
+            System.out.println("3. Cadastrar Plano de Saude");
             System.out.println(ANSI_YELLOW + "0. Voltar ao Menu Principal" + ANSI_RESET);
-            System.out.print("Escolha uma opção: ");
+            System.out.print("Escolha uma opcao: ");
             
             opcao = lerOpcao();
 
@@ -110,12 +119,12 @@ public class Main {
                     cadastrarPaciente();
                     break;
                 case 2:
-                    System.out.println(ANSI_RED + "Funcionalidade ainda não implementada." + ANSI_RESET);
+                    System.out.println(ANSI_RED + "Funcionalidade ainda nao implementada." + ANSI_RESET);
                     break;
                 case 0:
                     break;
                 default:
-                    System.out.println(ANSI_RED + "Opção inválida." + ANSI_RESET);
+                    System.out.println(ANSI_RED + "Opcao invalida." + ANSI_RESET);
                     break;
             }
         }
@@ -134,7 +143,7 @@ public class Main {
             repoPaciente.adicionar(novoPaciente);
             System.out.println(ANSI_GREEN + "Paciente cadastrado com sucesso!" + ANSI_RESET);
         } catch (NumberFormatException e) {
-            System.out.println(ANSI_RED + "Erro: Idade deve ser um número." + ANSI_RESET);
+            System.out.println(ANSI_RED + "Erro: Idade deve ser um numero." + ANSI_RESET);
         }
     }
 

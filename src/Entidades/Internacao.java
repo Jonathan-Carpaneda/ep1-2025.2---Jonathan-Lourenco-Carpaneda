@@ -57,6 +57,6 @@ public class Internacao {
     @Override
     public String toString() {
         String saidaStr = (dataSaida == null) ? "INTERNADO" : dataSaida.toString();
-        return String.format("Internação[Paciente: %s, Quarto: %d, Entrada: %s, Saída: %s]", this.paciente.getNome(), this.quarto.getNumero(), this.dataEntrada.toString(), saidaStr);
+        return String.format("Internacao[Paciente: %s, Quarto: %d, Entrada: %s, Saida: %s]", this.paciente.getNome(), this.quarto.getNumero(), this.dataEntrada.toString(), saidaStr);
     }
 }

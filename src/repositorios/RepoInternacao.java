@@ -49,7 +49,7 @@ public class RepoInternacao {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Arquivo internacoes.csv não encontrado. Será criado um novo.");
+            System.out.println("Arquivo internacoes.csv nao encontrado. Sera criado um novo.");
         }
     }
 
@@ -69,7 +69,7 @@ public class RepoInternacao {
                 bw.newLine();
             }
         } catch (IOException e) {
-            System.err.println("Erro ao salvar internações: " + e.getMessage());
+            System.err.println("Erro ao salvar internacoes: " + e.getMessage());
         }
     }
 

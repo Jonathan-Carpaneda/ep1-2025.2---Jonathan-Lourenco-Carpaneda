@@ -23,7 +23,7 @@ public class RepoEspecialidade {
                 this.especialidades.add(new Especialidade(linha.trim()));
             }
         } catch (IOException e) {
-            System.out.println("Arquivo especialidades.csv não encontrado. Será criado um novo.");
+            System.out.println("Arquivo especialidades.csv nao encontrado. Sera criado um novo.");
         }
     }
 

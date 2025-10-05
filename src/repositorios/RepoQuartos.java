@@ -24,7 +24,7 @@ public class RepoQuartos {
                 this.quartos.add(new Quarto(numero));
             }
         } catch (IOException e) {
-            System.out.println("Arquivo quartos.csv não encontrado. Será criado um novo.");
+            System.out.println("Arquivo quartos.csv nao encontrado. Sera criado um novo.");
         }
     }
 

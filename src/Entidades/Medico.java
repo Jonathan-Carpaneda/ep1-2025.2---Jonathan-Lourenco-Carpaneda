@@ -57,6 +57,6 @@ public class Medico extends Pessoa {
 
     @Override
     public String toString() {
-        return String.format("Médico[Nome: %s, CRM: %s, Especialidade: %s, Custo da Consulta: R$%.2f]", this.getNome(), this.crm, this.especialidade.getTipoEspecialidade(), this.custoConsulta);
+        return String.format("Medico[Nome: %s, CRM: %s, Especialidade: %s, Custo da Consulta: R$%.2f]", this.getNome(), this.crm, this.especialidade.getTipoEspecialidade(), this.custoConsulta);
     }
 }

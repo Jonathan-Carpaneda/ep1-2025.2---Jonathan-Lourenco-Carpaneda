@@ -32,7 +32,7 @@ public class RepoPaciente {
                 }
             }
         } catch (IOException | NumberFormatException e) {
-            System.out.println("Arquivo pacientes.csv não encontrado ou corrompido. Um novo será criado.");
+            System.out.println("Arquivo pacientes.csv nao encontrado. Sera criado um novo.");
         }
     }
 

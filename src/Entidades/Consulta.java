@@ -64,6 +64,6 @@ public class Consulta {
 
     @Override
     public String toString() {
-        return String.format("Consulta[Data: %s, Paciente: %s, Médico: %s, Status: %s]", this.dataHora.toString(), this.paciente.getNome(), this.medico.getNome(), this.status);
+        return String.format("Consulta[Data: %s, Paciente: %s, Medico: %s, Status: %s]", this.dataHora.toString(), this.paciente.getNome(), this.medico.getNome(), this.status);
     }
 }

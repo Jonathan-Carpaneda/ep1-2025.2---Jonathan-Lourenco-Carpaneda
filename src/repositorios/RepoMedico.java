@@ -35,7 +35,7 @@ public class RepoMedico {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Arquivo medicos.csv não encontrado. Será criado um novo.");
+            System.out.println("Arquivo medicos.csv nao encontrado. Sera criado um novo.");
         }
     }
 
@@ -49,7 +49,7 @@ public class RepoMedico {
                 bw.newLine();
             }
         } catch (IOException e) {
-            System.err.println("Erro ao salvar médicos: " + e.getMessage());
+            System.err.println("Erro ao salvar medicos: " + e.getMessage());
         }
     }
 
