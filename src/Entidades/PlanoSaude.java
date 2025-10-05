@@ -20,6 +20,10 @@ public class PlanoSaude {
         return nomeDoPlano;
     }
 
+    public Map<String, Double> getDescontos() {
+    return this.descontos;
+}
+
     //métodos
 
     public void definirDesconto(String especialidade, double desconto){

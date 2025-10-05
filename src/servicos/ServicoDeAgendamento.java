@@ -40,4 +40,6 @@ public class ServicoDeAgendamento {
         return "SUCESSO: Consulta agendada para " + paciente.getNome() + " com Dr(a). " + medico.getNome() + ".";
     }
     
+    
+
 }
