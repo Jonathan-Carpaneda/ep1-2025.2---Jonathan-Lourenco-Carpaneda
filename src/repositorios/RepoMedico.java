@@ -1,10 +1,11 @@
-package Repositórios;
+package repositorios;
 
-import Entidades.Especialidade;
-import Entidades.Medico;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import entidades.Especialidade;
+import entidades.Medico;
 
 public class RepoMedico {
     private final String CAMINHO_ARQUIVO = "medicos.csv";

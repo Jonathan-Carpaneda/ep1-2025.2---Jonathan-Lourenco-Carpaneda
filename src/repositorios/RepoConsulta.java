@@ -1,10 +1,11 @@
-package Repositórios;
+package repositorios;
 
-import Entidades.*;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import entidades.*;
 
 public class RepoConsulta {
     private final String CAMINHO_ARQUIVO = "consultas.csv";

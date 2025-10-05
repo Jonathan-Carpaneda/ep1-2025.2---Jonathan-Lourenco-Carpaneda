@@ -1,4 +1,4 @@
-package Entidades;
+package entidades;
 
 public class PacientePlano extends Paciente {
     private PlanoSaude plano;

@@ -1,9 +1,10 @@
-package Repositórios;
+package repositorios;
 
-import Entidades.Quarto;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import entidades.Quarto;
 
 public class RepoQuartos {
     private final String CAMINHO_ARQUIVO = "quartos.csv";
