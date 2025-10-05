@@ -58,6 +58,10 @@ public class RepoPlano {
         }
     }
 
+    public void Salvar(){
+        salvarNoCsv();
+    }
+
     public void adicionar(PlanoSaude plano) {
         this.planosDeSaude.add(plano);
         salvarNoCsv();

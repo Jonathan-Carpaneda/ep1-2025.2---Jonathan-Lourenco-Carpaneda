@@ -20,13 +20,13 @@ public class ServicoDeRelatorio {
     private RepoPlano repoPlano;
     private ServicoDeFaturamento servicoDeFaturamento;
 
-    public ServicoDeRelatorio(RepoPaciente pRepo, RepoMedico mRepo, RepoConsulta cRepo, RepoInternacao iRepo, RepoPlano planoRepo, ServicoDeFaturamento faturaService) {
+    public ServicoDeRelatorio(RepoPaciente pRepo, RepoMedico mRepo, RepoConsulta cRepo, RepoInternacao iRepo, RepoPlano planoRepo, ServicoDeFaturamento servicoDeFaturamento) {
         this.pacienteRepo = pRepo;
         this.medicoRepo = mRepo;
         this.consultaRepo = cRepo;
         this.internacaoRepo = iRepo;
         this.repoPlano = planoRepo;
-        this.servicoDeFaturamento = faturaService;
+        this.servicoDeFaturamento = servicoDeFaturamento;
     }
 
     public void gerarRelatorioPacientes() {
