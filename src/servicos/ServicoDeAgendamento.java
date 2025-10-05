@@ -6,12 +6,12 @@ import repositorios.RepoMedico;
 import repositorios.RepoPaciente;
 import java.time.LocalDateTime;
 
-public class AgendamentoService {
+public class ServicoDeAgendamento {
     private RepoConsulta consultaRepo;
     private RepoPaciente pacienteRepo;
     private RepoMedico medicoRepo;
 
-    public AgendamentoService(RepoConsulta cRepo, RepoPaciente pRepo, RepoMedico mRepo) {
+    public ServicoDeAgendamento(RepoConsulta cRepo, RepoPaciente pRepo, RepoMedico mRepo) {
         this.consultaRepo = cRepo;
         this.pacienteRepo = pRepo;
         this.medicoRepo = mRepo;
