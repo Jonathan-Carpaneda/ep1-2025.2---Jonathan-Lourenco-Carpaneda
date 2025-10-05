@@ -10,11 +10,11 @@ public class PacientePlano extends Paciente {
     }
 
     //getters e setters
-    public void setNomePlano(PlanoSaude nomePlano) {
-        this.plano = nomePlano;
+    public void setPlano(PlanoSaude plano) {
+        this.plano = plano;
     }
 
-    public PlanoSaude getNomePlano() {
+    public PlanoSaude getPlano() {
         return plano;
     }
 
