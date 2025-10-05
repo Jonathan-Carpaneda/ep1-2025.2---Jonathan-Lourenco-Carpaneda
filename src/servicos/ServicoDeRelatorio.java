@@ -5,8 +5,10 @@ import repositorios.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class ServicoDeRelatorio {
@@ -15,12 +17,16 @@ public class ServicoDeRelatorio {
     private RepoMedico medicoRepo;
     private RepoConsulta consultaRepo;
     private RepoInternacao internacaoRepo;
+    private RepoPlano repoPlano;
+    private ServicoDeFaturamento servicoDeFaturamento;
 
-    public ServicoDeRelatorio(RepoPaciente pRepo, RepoMedico mRepo, RepoConsulta cRepo, RepoInternacao iRepo) {
+    public ServicoDeRelatorio(RepoPaciente pRepo, RepoMedico mRepo, RepoConsulta cRepo, RepoInternacao iRepo, RepoPlano planoRepo, ServicoDeFaturamento faturaService) {
         this.pacienteRepo = pRepo;
         this.medicoRepo = mRepo;
         this.consultaRepo = cRepo;
         this.internacaoRepo = iRepo;
+        this.repoPlano = planoRepo;
+        this.servicoDeFaturamento = faturaService;
     }
 
     public void gerarRelatorioPacientes() {
@@ -139,4 +145,136 @@ public void gerarRelatorioPacientesPorMedico(Medico medico) {
         System.out.println("  - " + p.toString());
     }
 }
+
+ public String gerarConteudoRelatorioPacientes() {
+        StringBuilder relatorio = new StringBuilder();
+        relatorio.append("CPF,Nome,Idade,Qtd. Consultas,Qtd. Internacoes\n");
+
+        List<Paciente> pacientes = pacienteRepo.listarTodos();
+        if (pacientes.isEmpty()) {
+            return "Nenhum paciente cadastrado.";
+        }
+
+        for (Paciente p : pacientes) {
+            relatorio.append(String.format("%s,%s,%d,%d,%d\n", p.getCpf(), p.getNome(), p.getIdade(), p.gethConsultas().size(), p.gethInternacao().size()));
+        }
+        return relatorio.toString();
+    }
+
+    public String gerarConteudoRelatorioMedicos() {
+        StringBuilder relatorio = new StringBuilder();
+        relatorio.append("CRM,Nome,Especialidade,Custo Consulta,Consultas Agendadas\n");
+        List<Medico> medicos = medicoRepo.listarTodos();
+        if (medicos.isEmpty()) {
+            return "Nenhum medico cadastrado.";
+        }
+        for (Medico m : medicos) {
+            relatorio.append(String.format("%s,%s,%s,%.2f,%d\n", m.getCrm(), m.getNome(), m.getEspecialidade().getTipoEspecialidade(), 
+            m.getCustoConsulta(), m.getAgenda().size()));
+        }
+        return relatorio.toString();
+    }
+
+    public String gerarConteudoRelatorioConsultas(String filtroCpf, String filtroCrm) {
+        StringBuilder relatorio = new StringBuilder();
+        relatorio.append("Data/Hora,Paciente,Medico,Especialidade,Status\n");
+        List<Consulta> consultas = consultaRepo.listarTodos();
+        boolean encontrou = false;
+        for(Consulta c : consultas) {
+            boolean match = true;
+            if (filtroCpf != null && !filtroCpf.isEmpty() && !c.getPaciente().getCpf().equals(filtroCpf)) {
+                match = false;
+            }
+            if (filtroCrm != null && !filtroCrm.isEmpty() && !c.getMedico().getCrm().equals(filtroCrm)) {
+                match = false;
+            }
+
+            if(match) {
+                relatorio.append(String.format("%s,%s,%s,%s,%s\n", c.getDataHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), 
+                c.getPaciente().getNome(), c.getMedico().getNome(), c.getMedico().getEspecialidade().getTipoEspecialidade(), c.getStatus()));
+                encontrou = true;
+            }
+        }
+        if (!encontrou) return "Nenhuma consulta encontrada para os filtros fornecidos.";
+        return relatorio.toString();
+    }
+    
+    public String gerarConteudoRelatorioPacientesInternados() {
+        StringBuilder relatorio = new StringBuilder();
+        relatorio.append("Paciente,Quarto,Medico Responsavel,Data de Entrada\n");
+        List<Internacao> todasAsInternacoes = internacaoRepo.listarTodos();
+        boolean encontrouAlgum = false;
+        for (Internacao internacao : todasAsInternacoes) {
+            if (internacao.getDataSaida() == null) {
+                relatorio.append(String.format("%s,%d,%s,%s\n", internacao.getPaciente().getNome(), internacao.getQuarto().getNumero(), 
+                internacao.getMedicoResponsavel().getNome(), internacao.getDataEntrada().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+                encontrouAlgum = true;
+            }
+        }
+        if (!encontrouAlgum) return "Nenhum paciente internado no momento.";
+        return relatorio.toString();
+    }
+
+    public void imprimirEstatisticasGerais() {
+        System.out.println("\n--- Estatisticas Gerais ---");
+        gerarEstatisticaMedicoMaisAtivo();
+        gerarEstatisticaEspecialidadeMaisProcurada();
+    }
+    
+    public void gerarEstatisticaEspecialidadeMaisProcurada() {
+        List<Consulta> consultas = consultaRepo.listarTodos();
+        if (consultas.isEmpty()) {
+            System.out.println("Nenhuma consulta realizada para calcular especialidade mais procurada.");
+            return;
+        }
+        Map<String, Integer> contagem = new HashMap<>();
+        for (Consulta c : consultas) {
+            String especialidade = c.getMedico().getEspecialidade().getTipoEspecialidade();
+            contagem.put(especialidade, contagem.getOrDefault(especialidade, 0) + 1);
+        }
+        String maisProcurada = "";
+        int maxCount = -1;
+        for (Map.Entry<String, Integer> entry : contagem.entrySet()) {
+            if (entry.getValue() > maxCount) {
+                maxCount = entry.getValue();
+                maisProcurada = entry.getKey();
+            }
+        }
+        System.out.println("Especialidade mais procurada: " + maisProcurada + " (" + maxCount + " consultas).");
+    }
+
+    public void imprimirEstatisticaPlanoSaude() {
+        System.out.println("\n--- Estatisticas de Planos de Saude ---");
+        List<PlanoSaude> planos = repoPlano.listarTodos();
+        List<Paciente> pacientes = pacienteRepo.listarTodos();
+        List<Consulta> consultas = consultaRepo.listarTodos();
+        if (planos.isEmpty()) {
+            System.out.println("Nenhum plano de saude cadastrado.");
+            return;
+        }
+        for (PlanoSaude plano : planos) {
+            int contadorPacientes = 0;
+            double economiaTotal = 0.0;
+            for (Paciente p : pacientes) {
+                if (p instanceof PacientePlano) {
+                    PacientePlano pPlano = (PacientePlano) p;
+                    if (pPlano.getPlano().getNomeDoPlano().equals(plano.getNomeDoPlano())) {
+                        contadorPacientes++;
+                    }
+                }
+            }
+            for (Consulta c : consultas) {
+                if (c.getPaciente() instanceof PacientePlano) {
+                    PacientePlano pPlano = (PacientePlano) c.getPaciente();
+                    if (pPlano.getPlano().getNomeDoPlano().equals(plano.getNomeDoPlano())) {
+                        double custoBase = c.getMedico().getCustoConsulta();
+                        double custoFinal = servicoDeFaturamento.calcularCustoConsulta(c);
+                        economiaTotal += (custoBase - custoFinal);
+                    }
+                }
+            }
+            System.out.printf("Plano '%s': %d pacientes | Economia total gerada: R$ %.2f\n",
+                              plano.getNomeDoPlano(), contadorPacientes, economiaTotal);
+        }
+    }
 }

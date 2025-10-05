@@ -137,8 +137,8 @@ public class Main {
             System.out.println(ANSI_CYAN + "\n--- Menu de Relatorios ---" + ANSI_RESET);
             System.out.println("1. Relatorio Geral de Pacientes");
             System.out.println("2. Relatorio Geral de Medicos");
-            System.out.println("3. Detalhes de um Medico Especifico (por CRM)");
-            System.out.println("4. Relatorio de Pacientes Internados");
+            System.out.println("3. Detalhes de um Medico Por CRM");
+            System.out.println("4. Relatorio de Consultas Por Paciente");
             System.out.println("5. Relatorio de Pacientes Internados");
             System.out.println("6. Estatisticas Gerais");
             System.out.println(ANSI_YELLOW + "0. Voltar ao Menu Principal" + ANSI_RESET);
@@ -298,7 +298,7 @@ public class Main {
                 Consulta consultaAgendada = servicoDeAgendamento.buscarConsultaAgendada(pacienteCpf, medicoCrm, dataHora);
                 if (consultaAgendada != null) {
                     double custoFinal = servicoDeFaturamento.calcularCustoConsulta(consultaAgendada);
-                    System.out.printf("Custo estimado da consulta: R$ %.2f\n", custoFinal);
+                    System.out.printf("Custo da consulta: R$ %.2f\n", custoFinal);
                 }
             } else {
                 System.out.println(ANSI_RED + resultado + ANSI_RESET);
