@@ -75,4 +75,9 @@ public class RepoConsulta {
     public List<Consulta> listarTodos() {
         return this.consultas;
     }
+
+    public void salvar() {
+    salvarNoCsv();
+    }
+
 }

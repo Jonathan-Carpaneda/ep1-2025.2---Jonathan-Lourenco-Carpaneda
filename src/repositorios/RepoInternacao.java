@@ -4,7 +4,6 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import entidades.*;
 
 public class RepoInternacao {
@@ -82,4 +81,18 @@ public class RepoInternacao {
     public List<Internacao> listarTodos() {
         return this.internacoes;
     }
+
+    public Internacao buscarInternacaoAtivaPorCpf(String cpf) {
+        for (Internacao internacao : this.internacoes) {
+            if (internacao.getPaciente().getCpf().equals(cpf) && internacao.getDataSaida() == null) {
+                return internacao;
+            }
+        }
+        return null;
+    }
+
+    public void salvar() {
+    salvarNoCsv();
+    }
+
 }

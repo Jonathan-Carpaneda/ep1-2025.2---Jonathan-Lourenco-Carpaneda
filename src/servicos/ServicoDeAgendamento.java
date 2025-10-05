@@ -5,6 +5,7 @@ import repositorios.RepoConsulta;
 import repositorios.RepoMedico;
 import repositorios.RepoPaciente;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ServicoDeAgendamento {
     private RepoConsulta consultaRepo;
@@ -39,7 +40,25 @@ public class ServicoDeAgendamento {
 
         return "SUCESSO: Consulta agendada para " + paciente.getNome() + " com Dr(a). " + medico.getNome() + ".";
     }
-    
-    
 
+    public Consulta buscarConsultaAgendada(String pacienteCpf, String medicoCrm) {
+        List<Consulta> todasAsConsultas = consultaRepo.listarTodos();
+        for (Consulta consulta : todasAsConsultas) {
+            if (consulta.getPaciente().getCpf().equals(pacienteCpf) &&
+                consulta.getMedico().getCrm().equals(medicoCrm) &&
+                consulta.getStatus() == StatusConsulta.AGENDADA) {
+                return consulta;
+            }
+        }
+        return null;
+    }
+
+    public void concluirConsulta(Consulta consulta, String diagnostico, String prescricao) {
+        if (consulta != null) {
+            consulta.setDiagnostico(diagnostico);
+            consulta.setPrescricao(prescricao);
+            consulta.setStatus(StatusConsulta.CONCLUIDA);
+            consultaRepo.salvar();
+        }
+    }
 }

@@ -40,4 +40,16 @@ public class ServicoDeInternacao {
         return "SUCESSO: Internação iniciada para " + paciente.getNome() + " no quarto " + numeroQuarto + ".";
     }
 
+    public String finalizarInternacao(String pacienteCpf) {
+        Internacao internacaoAtiva = internacaoRepo.buscarInternacaoAtivaPorCpf(pacienteCpf);
+        if (internacaoAtiva == null) {
+            return "ERRO: Paciente com CPF " + pacienteCpf + " não possui uma internação ativa.";
+        }
+
+        internacaoAtiva.setDataSaida(LocalDateTime.now());
+        internacaoAtiva.getQuarto().setEstaOcupado(false);
+        internacaoRepo.salvar();
+
+        return "SUCESSO: Alta registrada para o paciente " + internacaoAtiva.getPaciente().getNome() + ".";
+    }
 }
