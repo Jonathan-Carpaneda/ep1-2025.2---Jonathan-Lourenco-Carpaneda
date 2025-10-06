@@ -1,0 +1,10 @@
+/bin/
+*.csv
+*.log
+*.tmp
+/.vscode/
+.idea/
+*.iml
+*.project
+.settings/
+target/
