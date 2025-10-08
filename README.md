@@ -26,7 +26,8 @@ Desenvolvimento de um sistema de gerenciamento hospitalar utilizando os conceito
    Após a execução na pasta raiz do projeto será criada uma pasta "bin", dentro dela abra o terminal e exevute o seguinte comando `java app.Main`.
 
 3. **Estrutura de Pastas:**  
-```/ep1-2025.2---Jonathan-Lourenco-Carpaneda
+```
+   /ep1-2025.2---Jonathan-Lourenco-Carpaneda
    ├── src/
    │   ├── app/
    │   │   ├── Main.java
@@ -56,6 +57,7 @@ Desenvolvimento de um sistema de gerenciamento hospitalar utilizando os conceito
    │       └── ServicoDeRelatorio.java
    └── bin/                (Criada após a compilação)
        └── *.csv           (Arquivos de dados gerados aqui)
+```
 
 3. **Versão do JAVA utilizada:**  
    openjdk version "17.0.16" 2025-07-15
