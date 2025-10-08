@@ -20,16 +20,45 @@ Desenvolvimento de um sistema de gerenciamento hospitalar utilizando os conceito
 ## Instruções para Compilação e Execução
 
 1. **Compilação:**  
-   [Descrever aqui como compilar o projeto. Exemplo: `javac Main.java` ou o script usado]
+   Na pasta "src" abra o terminal e escreva o seguinte comando  `javac -d ../bin app/Main.java`.
 
 2. **Execução:**  
-   [Descrever aqui como executar o projeto. Exemplo: `java Main` ou o script usado]
+   Após a execução na pasta raiz do projeto será criada uma pasta "bin", dentro dela abra o terminal e exevute o seguinte comando `java app.Main`.
 
 3. **Estrutura de Pastas:**  
-   [Descrever aqui as principais pastas do projeto]
+   /ep1-2025.2---Jonathan-Lourenco-Carpaneda
+   ├── src/
+   │   ├── app/
+   │   │   ├── Main.java
+   │   ├── entidades/
+   │   │   ├── Consulta.java
+   │   │   ├── Especialidade.java
+   │   │   ├── Internacao.java
+   │   │   ├── Medico.java
+   │   │   ├── Paciente.java
+   │   │   ├── PacientePlano.java
+   │   │   ├── Pessoa.java
+   │   │   ├── PlanoSaude.java
+   │   │   ├── Quarto.java
+   │   │   └── StatusConsulta.java
+   │   ├── repositorios/
+   │   │   ├── RepoConsulta.java
+   │   │   ├── RepoEspecialidade.java
+   │   │   ├── RepoInternacao.java
+   │   │   ├── RepoMedico.java
+   │   │   ├── RepoPaciente.java
+   │   │   ├── RepoPlano.java
+   │   │   └── RepoQuartos.java
+   │   └── servicos/
+   │       ├── ServicoDeAgendamento.java
+   │       ├── ServicoDeFaturamento.java
+   │       ├── ServicoDeInternacao.java
+   │       └── ServicoDeRelatorio.java
+   └── bin/                (Criada após a compilação)
+       └── *.csv           (Arquivos de dados gerados aqui)
 
 3. **Versão do JAVA utilizada:**  
-   [Descrever aqui como versão do JAVA utilizada no projeto. Sugestão: `java 21`]
+   openjdk version "17.0.16" 2025-07-15
 
 ---
 
@@ -42,13 +71,25 @@ Desenvolvimento de um sistema de gerenciamento hospitalar utilizando os conceito
 ## Prints da Execução
 
 1. Menu Principal:  
-   ![Inserir Print 1](caminho/do/print1.png)
+   ![Menu Principal do Sistema](./prints/Menu_Principal.png)
 
 2. Cadastro de Médico:  
-   ![Inserir Print 2](caminho/do/print2.png)
+   ![Cadastro de Médico](./prints/Cadastro_De_Medico.png)
 
-3. Relatório de ?:  
-   ![Inserir Print 3](caminho/do/print3.png)
+3. Relatório de Pacientes:  
+   ![Relatório de Pacientes](./prints/Relatorio_De_Pacientes.png)
+
+4. Relatório de médicos:  
+   ![Relatório de Médicos](./prints/Relatorio_De_Medicoss.png)
+
+5. Relatório dos Planos de Saúde:  
+   ![Relatório dos Planos de Saúde](./prints/Relatorio_De_Planos.png)
+
+5. Menu de Operações:  
+   ![Menu de Operações](./prints/Menu_De_Operacoes.png)
+
+5. Agendamento de Consulta:  
+   ![Agendamento de Consulta](./prints/Agendamento.png)
 
 ---
 
@@ -56,13 +97,13 @@ Desenvolvimento de um sistema de gerenciamento hospitalar utilizando os conceito
 
 ## Observações (Extras ou Dificuldades)
 
-- [Espaço para o aluno comentar qualquer funcionalidade extra que implementou, dificuldades enfrentadas, ou considerações importantes.]
+- Neste projeto tive dois problemas, o primeiro foi com a formatação e não consegui implementar o UTF-8, já tive esse mesmo problema quando fiz meu projeto em C na matéria de APC e o segundo problema foi que não consegui implementar a função para exportar os dados dos relatórios. Tirando esses problemas, no decorrer do projeto consegui entender muito mais como um software funciona, a POO é realmente facinante.
 
 ---
 
 ## Contato
 
-- [Opcional: E-mail pessoal do aluno.]
+- jonathancarpanedaj@gmail.com
 
 ---
 
