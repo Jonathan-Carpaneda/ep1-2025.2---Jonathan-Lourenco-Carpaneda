@@ -66,7 +66,6 @@ public class ServicoDeAgendamento {
         return null;
     }
 
-
     public void concluirConsulta(Consulta consulta, String diagnostico, String prescricao) {
         if (consulta != null) {
             consulta.setDiagnostico(diagnostico);
@@ -75,4 +74,15 @@ public class ServicoDeAgendamento {
             consultaRepo.salvar();
         }
     }
+
+    public String cancelarConsulta(String pacienteCpf, String medicoCrm) {
+        Consulta consulta = buscarConsultaAgendada(pacienteCpf, medicoCrm);
+        if (consulta == null) {
+            return "ERRO: Nenhuma consulta agendada ativa encontrada para este paciente e médico.";
+        }
+        consulta.setStatus(StatusConsulta.CANCELADA);
+        consultaRepo.salvar();
+        return "SUCESSO: Consulta cancelada com sucesso.";
+    }
 }
+

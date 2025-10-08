@@ -52,4 +52,18 @@ public class ServicoDeInternacao {
 
         return "SUCESSO: Alta registrada para o paciente " + internacaoAtiva.getPaciente().getNome() + ".";
     }
+
+    public String cancelarInternacao(String pacienteCpf) {
+        Internacao internacaoAtiva = internacaoRepo.buscarInternacaoAtivaPorCpf(pacienteCpf);
+        if (internacaoAtiva == null) {
+            return "ERRO: Paciente com CPF " + pacienteCpf + " não possui uma internação ativa para cancelar.";
+        }
+        // Libera o quarto
+        internacaoAtiva.getQuarto().setEstaOcupado(false);
+        // Remove o registro da internação
+        internacaoRepo.remover(internacaoAtiva);
+
+        return "SUCESSO: Internação do paciente " + internacaoAtiva.getPaciente().getNome() + " foi cancelada.";
+    }
 }
+

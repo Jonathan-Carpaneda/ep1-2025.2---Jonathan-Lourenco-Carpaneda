@@ -59,11 +59,11 @@ public class RepoInternacao {
             for (Internacao internacao : this.internacoes) {
                 String dataSaidaStr = (internacao.getDataSaida() == null) ? "" : internacao.getDataSaida().toString();
                 String linha = internacao.getPaciente().getCpf() + "," +
-                               internacao.getMedicoResponsavel().getCrm() + "," +
-                               internacao.getQuarto().getNumero() + "," +
-                               internacao.getDataEntrada().toString() + "," +
-                               dataSaidaStr + "," +
-                               internacao.getCustoTotal();
+                                 internacao.getMedicoResponsavel().getCrm() + "," +
+                                 internacao.getQuarto().getNumero() + "," +
+                                 internacao.getDataEntrada().toString() + "," +
+                                 dataSaidaStr + "," +
+                                 internacao.getCustoTotal();
                 bw.write(linha);
                 bw.newLine();
             }
@@ -75,6 +75,14 @@ public class RepoInternacao {
     public void adicionar(Internacao internacao) {
         this.internacoes.add(internacao);
         internacao.getPaciente().addInternacao(internacao);
+        salvarNoCsv();
+    }
+
+    public void remover(Internacao internacao) {
+        this.internacoes.remove(internacao);
+        if (internacao.getPaciente() != null) {
+            internacao.getPaciente().gethInternacao().remove(internacao);
+        }
         salvarNoCsv();
     }
 
@@ -94,5 +102,4 @@ public class RepoInternacao {
     public void salvar() {
     salvarNoCsv();
     }
-
 }

@@ -115,6 +115,8 @@ public class Main {
             System.out.println("2. Concluir Consulta (Registrar Diagnostico)");
             System.out.println("3. Iniciar Internacao");
             System.out.println("4. Finalizar Internacao (Dar Alta)");
+            System.out.println("5. Cancelar Consulta");
+            System.out.println("6. Cancelar Internacao");
             System.out.println(ANSI_YELLOW + "0. Voltar ao Menu Principal" + ANSI_RESET);
             System.out.print("Escolha uma opcao: ");
             
@@ -125,6 +127,8 @@ public class Main {
                 case 2: concluirConsulta(); break;
                 case 3: iniciarInternacao(); break;
                 case 4: finalizarInternacao(); break;
+                case 5: cancelarConsulta(); break;
+                case 6: cancelarInternacao(); break;
                 case 0: break;
                 default: System.out.println(ANSI_RED + "Opcao invalida." + ANSI_RESET); break;
             }
@@ -138,9 +142,9 @@ public class Main {
             System.out.println("1. Relatorio Geral de Pacientes");
             System.out.println("2. Relatorio Geral de Medicos");
             System.out.println("3. Detalhes de um Medico Por CRM");
-            System.out.println("4. Relatorio de Consultas Por Paciente");
+            System.out.println("4. Historico Consolidado do Paciente");
             System.out.println("5. Relatorio de Pacientes Internados");
-            System.out.println("6. Estatisticas de Planos de Saude");
+            System.out.println("6. Estatisticas de Planos de Saude (com economia total)");
             System.out.println("7. Estatisticas Gerais");
             System.out.println(ANSI_YELLOW + "0. Voltar ao Menu Principal" + ANSI_RESET);
             System.out.print("Escolha uma opcao: ");
@@ -151,15 +155,38 @@ public class Main {
                 case 1: servicoDeRelatorio.gerarRelatorioPacientes(); break;
                 case 2: servicoDeRelatorio.gerarRelatorioMedicos(); break;
                 case 3: exibirDetalhesMedico(); break;
-                case 4: relatorioConsultasPorPaciente(); break;
+                case 4: exibirHistoricoPaciente(); break;
                 case 5: servicoDeRelatorio.gerarRelatorioPacientesInternados(); break;
                 case 6: servicoDeRelatorio.imprimirEstatisticaPlanoSaude(); break;
-                case 7: servicoDeRelatorio.gerarEstatisticaMedicoMaisAtivo(); break;
+                case 7: exibirMenuEstatisticasGerais(); break;
                 case 0: break;
                 default: System.out.println(ANSI_RED + "Opcao invalida." + ANSI_RESET); break;
             }
              if (opcao != 0) {
-                System.out.println("\nPressione Enter para voltar...");
+                 System.out.println("\nPressione Enter para voltar...");
+                 scanner.nextLine();
+             }
+        }
+    }
+    
+    private void exibirMenuEstatisticasGerais() {
+        int opcao = -1;
+        while(opcao != 0) {
+            System.out.println(ANSI_CYAN + "\n--- Menu de Estatisticas Gerais ---" + ANSI_RESET);
+            System.out.println("1. Medico que mais atendeu");
+            System.out.println("2. Especialidade mais procurada");
+            System.out.println(ANSI_YELLOW + "0. Voltar ao Menu de Relatorios" + ANSI_RESET);
+            System.out.print("Escolha uma opcao: ");
+
+            opcao = lerOpcao();
+            switch(opcao) {
+                case 1: servicoDeRelatorio.gerarEstatisticaMedicoMaisAtivo(); break;
+                case 2: servicoDeRelatorio.gerarEstatisticaEspecialidadeMaisProcurada(); break;
+                case 0: break;
+                default: System.out.println(ANSI_RED + "Opcao invalida." + ANSI_RESET); break;
+            }
+            if (opcao != 0) {
+                System.out.println("\nPressione Enter para continuar...");
                 scanner.nextLine();
             }
         }
@@ -238,25 +265,40 @@ public class Main {
     }
 
     private void cadastrarPlanoDeSaude() {
-        System.out.println("\n--- Cadastro de Plano de Saude ---");
-        System.out.print("Nome do Plano: ");
-        String nome = scanner.nextLine();
-        PlanoSaude novoPlano = new PlanoSaude(nome);
-        String adicionarMais = "s";
-        while(adicionarMais.equalsIgnoreCase("s")) {
-            System.out.print("Deseja adicionar um desconto por especialidade? (s/n): ");
-            adicionarMais = scanner.nextLine();
-            if (adicionarMais.equalsIgnoreCase("s")) {
-                System.out.print("  Nome da Especialidade: ");
-                String nomeEsp = scanner.nextLine();
-                System.out.print("  Valor do Desconto (ex: 0.25 para 25%): ");
-                double valorDesc = Double.parseDouble(scanner.nextLine());
-                novoPlano.definirDesconto(nomeEsp, valorDesc);
+        try {
+            System.out.println("\n--- Cadastro de Plano de Saude ---");
+            System.out.print("Nome do Plano: ");
+            String nome = scanner.nextLine();
+            PlanoSaude novoPlano = new PlanoSaude(nome);
+
+            System.out.print("Este e um plano especial com internacao gratuita (< 7 dias)? (s/n): ");
+            String isEspecial = scanner.nextLine();
+            if (isEspecial.equalsIgnoreCase("s")) {
+                novoPlano.setEspecialInternacaoGratuita(true);
             }
+
+            String adicionarMais = "s";
+            while(adicionarMais.equalsIgnoreCase("s")) {
+                System.out.print("Deseja adicionar um desconto por especialidade? (s/n): ");
+                adicionarMais = scanner.nextLine();
+                if (adicionarMais.equalsIgnoreCase("s")) {
+                    System.out.print("  Nome da Especialidade: ");
+                    String nomeEsp = scanner.nextLine();
+                    if (repoEspecialidade.buscarPorNome(nomeEsp) == null) {
+                         System.out.println(ANSI_RED + "Erro: Especialidade '" + nomeEsp + "' nao cadastrada." + ANSI_RESET);
+                         continue;
+                    }
+                    System.out.print("  Valor do Desconto (ex: 0.25 para 25%): ");
+                    double valorDesc = Double.parseDouble(scanner.nextLine());
+                    novoPlano.definirDesconto(nomeEsp, valorDesc);
+                }
+            }
+            
+            repoPlano.adicionar(novoPlano);
+            System.out.println(ANSI_GREEN + "Plano de Saude cadastrado com sucesso!" + ANSI_RESET);
+        } catch(NumberFormatException e) {
+            System.out.println(ANSI_RED + "Erro: Valor do desconto deve ser um número." + ANSI_RESET);
         }
-        
-        repoPlano.adicionar(novoPlano);
-        System.out.println(ANSI_GREEN + "Plano de Saude cadastrado com sucesso!" + ANSI_RESET);
     }
 
     private void cadastrarEspecialidade() {
@@ -300,7 +342,7 @@ public class Main {
                 Consulta consultaAgendada = servicoDeAgendamento.buscarConsultaAgendada(pacienteCpf, medicoCrm, dataHora);
                 if (consultaAgendada != null) {
                     double custoFinal = servicoDeFaturamento.calcularCustoConsulta(consultaAgendada);
-                    System.out.printf("Custo final da consulta: R$ %.2f\n", custoFinal);
+                    System.out.printf("Custo final da consulta (com descontos aplicados): R$ %.2f\n", custoFinal);
                 }
             } else {
                 System.out.println(ANSI_RED + resultado + ANSI_RESET);
@@ -338,6 +380,26 @@ public class Main {
         }
     }
 
+    private void cancelarConsulta() {
+        try {
+            System.out.println("\n--- Cancelamento de Consulta ---");
+            System.out.print("CPF do Paciente: ");
+            String pacienteCpf = scanner.nextLine();
+            System.out.print("CRM do Medico: ");
+            String medicoCrm = scanner.nextLine();
+
+            String resultado = servicoDeAgendamento.cancelarConsulta(pacienteCpf, medicoCrm);
+
+            if (resultado.startsWith("SUCESSO")) {
+                System.out.println(ANSI_GREEN + resultado + ANSI_RESET);
+            } else {
+                System.out.println(ANSI_RED + resultado + ANSI_RESET);
+            }
+        } catch (Exception e) {
+            System.out.println(ANSI_RED + "Ocorreu um erro ao tentar cancelar a consulta: " + e.getMessage() + ANSI_RESET);
+        }
+    }
+
     private void iniciarInternacao() {
         try {
             System.out.println("\n--- Iniciar Internacao ---");
@@ -363,12 +425,17 @@ public class Main {
             System.out.println("\n--- Finalizar Internacao (Dar Alta) ---");
             System.out.print("CPF do Paciente a receber alta: ");
             String pacienteCpf = scanner.nextLine();
+            Internacao internacao = repoInternacao.buscarInternacaoAtivaPorCpf(pacienteCpf);
+            if (internacao == null) {
+                System.out.println(ANSI_RED + "Nenhuma internação ativa encontrada para o paciente com CPF " + pacienteCpf + "." + ANSI_RESET);
+                return;
+            }
+
             String resultado = servicoDeInternacao.finalizarInternacao(pacienteCpf);
             if (resultado.startsWith("SUCESSO")) {
-                Internacao internacao = repoInternacao.buscarInternacaoAtivaPorCpf(pacienteCpf);
                 double custoFinal = servicoDeFaturamento.calcularCustoInternacao(internacao);
                 System.out.println(ANSI_GREEN + resultado + ANSI_RESET);
-                System.out.printf("Custo final da internacao: R$ %.2f\n", custoFinal);
+                System.out.printf("Custo final da internacao (com descontos aplicados): R$ %.2f\n", custoFinal);
             } else {
                 System.out.println(ANSI_RED + resultado + ANSI_RESET);
             }
@@ -377,10 +444,28 @@ public class Main {
         }
     }
 
-    private void relatorioConsultasPorPaciente() {
-        System.out.print("Digite o CPF do paciente para o relatorio: ");
+    private void cancelarInternacao() {
+        try {
+            System.out.println("\n--- Cancelamento de Internacao ---");
+            System.out.print("CPF do Paciente: ");
+            String pacienteCpf = scanner.nextLine();
+            
+            String resultado = servicoDeInternacao.cancelarInternacao(pacienteCpf);
+
+            if (resultado.startsWith("SUCESSO")) {
+                System.out.println(ANSI_GREEN + resultado + ANSI_RESET);
+            } else {
+                System.out.println(ANSI_RED + resultado + ANSI_RESET);
+            }
+        } catch (Exception e) {
+            System.out.println(ANSI_RED + "Ocorreu um erro ao tentar cancelar a internação: " + e.getMessage() + ANSI_RESET);
+        }
+    }
+    
+    private void exibirHistoricoPaciente() {
+        System.out.print("\nDigite o CPF do paciente para ver o historico consolidado: ");
         String cpf = scanner.nextLine();
-        servicoDeRelatorio.gerarRelatorioConsultasPorPaciente(cpf);
+        servicoDeRelatorio.gerarHistoricoConsolidadoPaciente(cpf);
     }
 
     private void exibirDetalhesMedico() {
@@ -414,28 +499,28 @@ public class Main {
     }
 
      private void gerenciarPlanoDeSaude() {
-        System.out.println("\n--- Gerenciamento de Planos de Saude ---");
-        System.out.println("1. Cadastrar novo Plano");
-        System.out.println("2. Editar descontos de um Plano existente");
-        System.out.print("Escolha uma opcao: ");
-        int opcao = lerOpcao();
+         System.out.println("\n--- Gerenciamento de Planos de Saude ---");
+         System.out.println("1. Cadastrar novo Plano");
+         System.out.println("2. Editar um Plano existente");
+         System.out.print("Escolha uma opcao: ");
+         int opcao = lerOpcao();
 
-        if (opcao == 1) {
-            cadastrarPlanoDeSaude();
-        } else if (opcao == 2) {
-            editarDescontosPlano();
-        } else {
-            System.out.println(ANSI_RED + "Opcao invalida." + ANSI_RESET);
-        }
-    }
+         if (opcao == 1) {
+             cadastrarPlanoDeSaude();
+         } else if (opcao == 2) {
+             editarPlano();
+         } else {
+             System.out.println(ANSI_RED + "Opcao invalida." + ANSI_RESET);
+         }
+     }
 
-    private void editarDescontosPlano() {
+    private void editarPlano() {
         List<PlanoSaude> planos = repoPlano.listarTodos();
         if (planos.isEmpty()) {
             System.out.println(ANSI_RED + "Nenhum plano de saude cadastrado para editar." + ANSI_RESET);
             return;
         }
-        System.out.println("Escolha o plano para editar os descontos:");
+        System.out.println("Escolha o plano para editar:");
         for (int i = 0; i < planos.size(); i++) {
             System.out.println((i+1) + ". " + planos.get(i).getNomeDoPlano());
         }
@@ -447,30 +532,36 @@ public class Main {
         }
         PlanoSaude planoParaEditar = planos.get(opcaoPlano - 1);
 
+        System.out.print("Deseja alterar o status de 'Internacao Gratuita' deste plano? (s/n): ");
+        String alterarStatus = scanner.nextLine();
+        if (alterarStatus.equalsIgnoreCase("s")) {
+            planoParaEditar.setEspecialInternacaoGratuita(!planoParaEditar.isEspecialInternacaoGratuita());
+            System.out.println("Status alterado para: " + (planoParaEditar.isEspecialInternacaoGratuita() ? "ATIVO" : "INATIVO"));
+        }
+
         String adicionarMais = "s";
         while(adicionarMais.equalsIgnoreCase("s")) {
-            System.out.print("Deseja adicionar/atualizar um desconto? (s/n): ");
+            System.out.print("Deseja adicionar/atualizar um desconto por especialidade? (s/n): ");
             adicionarMais = scanner.nextLine();
             if(adicionarMais.equalsIgnoreCase("s")) {
-                System.out.print("  Nome da Especialidade: ");
-                String nomeEsp = scanner.nextLine();
-                // Validar se a especialidade existe
-                if (repoEspecialidade.buscarPorNome(nomeEsp) == null) {
-                    System.out.println(ANSI_RED + "Erro: Especialidade '" + nomeEsp + "' nao cadastrada." + ANSI_RESET);
-                    continue; // Pula para a próxima iteração do loop
+                try {
+                    System.out.print("  Nome da Especialidade: ");
+                    String nomeEsp = scanner.nextLine();
+                    if (repoEspecialidade.buscarPorNome(nomeEsp) == null) {
+                        System.out.println(ANSI_RED + "Erro: Especialidade '" + nomeEsp + "' nao cadastrada." + ANSI_RESET);
+                        continue;
+                    }
+                    System.out.print("  Valor do Desconto (ex: 0.25 para 25%): ");
+                    double valorDesc = Double.parseDouble(scanner.nextLine());
+                    planoParaEditar.definirDesconto(nomeEsp, valorDesc);
+                } catch(NumberFormatException e) {
+                    System.out.println(ANSI_RED + "Erro: Valor do desconto deve ser um número." + ANSI_RESET);
                 }
-                System.out.print("  Valor do Desconto (ex: 0.25 para 25%): ");
-                double valorDesc = Double.parseDouble(scanner.nextLine());
-                planoParaEditar.definirDesconto(nomeEsp, valorDesc);
             }
         }
         repoPlano.Salvar();
         System.out.println(ANSI_GREEN + "Plano de Saude atualizado com sucesso!" + ANSI_RESET);
     }
-
-
-
-
 
     private int lerOpcao() {
         try {

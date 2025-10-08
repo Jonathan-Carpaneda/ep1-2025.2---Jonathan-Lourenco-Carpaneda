@@ -29,6 +29,39 @@ public class ServicoDeRelatorio {
         this.servicoDeFaturamento = servicoDeFaturamento;
     }
 
+    public void gerarHistoricoConsolidadoPaciente(String cpf) {
+        Paciente paciente = pacienteRepo.buscarPorCpf(cpf);
+        if (paciente == null) {
+            System.out.println("\nERRO: Paciente com CPF " + cpf + " nao encontrado.");
+            return;
+        }
+
+        System.out.println("\n--- Historico Consolidado para " + paciente.getNome() + " ---");
+        System.out.println("CPF: " + paciente.getCpf() + " | Idade: " + paciente.getIdade());
+
+        System.out.println("\n--- Consultas Registradas ---");
+        List<Consulta> consultas = paciente.gethConsultas();
+        if (consultas == null || consultas.isEmpty()) {
+            System.out.println("Nenhuma consulta registrada.");
+        } else {
+            consultas.sort(Comparator.comparing(Consulta::getDataHora).reversed());
+            for (Consulta c : consultas) {
+                System.out.println("  - " + c.toString());
+            }
+        }
+
+        System.out.println("\n--- Internacoes Registradas ---");
+        List<Internacao> internacoes = paciente.gethInternacao();
+        if (internacoes == null || internacoes.isEmpty()) {
+            System.out.println("Nenhuma internacao registrada.");
+        } else {
+            internacoes.sort(Comparator.comparing(Internacao::getDataEntrada).reversed());
+            for (Internacao i : internacoes) {
+                System.out.println("  - " + i.toString());
+            }
+        }
+    }
+
     public void gerarRelatorioPacientes() {
         System.out.println("\n--- Relatorio de Pacientes ---");
         List<Paciente> pacientes = pacienteRepo.listarTodos();
