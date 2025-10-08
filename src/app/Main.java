@@ -9,9 +9,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 
@@ -471,29 +468,9 @@ public class Main {
         System.out.println(ANSI_GREEN + "Plano de Saude atualizado com sucesso!" + ANSI_RESET);
     }
 
-    private void lidarComSaidaRelatorio(String nomeArquivo, String conteudo) {
-        System.out.println("\n1. Exibir na tela");
-        System.out.println("2. Exportar para " + nomeArquivo);
-        System.out.print("Escolha uma opcao: ");
-        int opcao = lerOpcao();
-        if (opcao == 1) {
-            System.out.println("\n--- Conteudo do Relatorio ---");
-            System.out.println(conteudo.replace(",", " | "));
-        } else if (opcao == 2) {
-            exportarRelatorio(nomeArquivo, conteudo);
-        } else {
-            System.out.println(ANSI_RED + "Opcao invalida." + ANSI_RESET);
-        }
-    }
 
-    private void exportarRelatorio(String nomeArquivo, String conteudo) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(nomeArquivo))) {
-            bw.write(conteudo);
-            System.out.println(ANSI_GREEN + "Relatorio exportado com sucesso para '" + nomeArquivo + "'" + ANSI_RESET);
-        } catch (IOException e) {
-            System.out.println(ANSI_RED + "Erro ao exportar relatorio: " + e.getMessage() + ANSI_RESET);
-        }
-    }
+
+
 
     private int lerOpcao() {
         try {
