@@ -55,7 +55,7 @@ Desenvolvimento de um sistema de gerenciamento hospitalar utilizando os conceito
    │       ├── ServicoDeInternacao.java
    │       └── ServicoDeRelatorio.java
    └── bin/                (Criada após a compilação)
-       └── *.csv           (Arquivos de dados gerados aqui)```
+       └── *.csv           (Arquivos de dados gerados aqui)
 
 3. **Versão do JAVA utilizada:**  
    openjdk version "17.0.16" 2025-07-15
